@@ -1,6 +1,7 @@
 # Backend API Documentation
 
 ## **User Auth Section**
+
 ## Register User -
 
 ### Overview
@@ -106,5 +107,113 @@ The request body must be in JSON format and include the following fields:
 ### **JWT Authentication**
 
 Upon successful registration, a JWT token is generated and returned in a cookie to the client for further authentication in subsequent requests.
+
+- **Cookie**: The token is saved in the `token` cookie with a lifespan of 8 hours.
+
+---
+
+## Login User -
+
+### Overview
+
+This API handles user login by verifying the provided email and password. If the credentials are correct, a JWT token is generated and returned in a cookie for session management.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/auth/login`
+- ### Method: `POST`
+
+---
+
+### Request Body:
+
+The request body must be in JSON format and include the following fields:
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "Password123!"
+}
+```
+
+---
+
+### **Fields**
+
+- **email**(string, required): The user's registered email address.
+
+- **password**(string, required): A password (must be at least 8 characters long, must include an uppercase letter, a lowercase letter, a number, and a special character).
+
+---
+
+### Example Response:
+
+- **Success Response (201 OK)**
+
+```json
+{
+  "success": true,
+  "message": "User logged in successfully."
+}
+```
+
+---
+
+### Error Responses
+
+- **Validation Errors (400 Bad Request)**
+
+  If the required fields (email or password) are missing, the following response is returned:
+
+```json
+{
+  "success": false,
+  "message": "All fields are required."
+}
+```
+
+- **Invalid Credentials (401 Unauthorized)**
+
+  If the email does not exist or the password is incorrect:
+
+```json
+{
+  "success": false,
+  "message": "Invalid credentials."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+
+---
+
+### **Behavior**
+
+1. ***Validates Input:*** Ensures that the email and password fields are provided
+
+2. ***Checks User Existence:*** Looks up the user by email in the database. If the user is not found, it returns an unauthorized response.
+
+3. ***Validates Password:*** Compares the provided password with the hashed password stored in the database. If the password is incorrect, it returns an unauthorized response.
+
+4. ***Generates JWT Token:*** Upon successful authentication, generates a JWT token for the user.
+
+5. ***Sets Cookie:*** The token is stored in a cookie for authentication in subsequent requests.
+
+---
+
+### **JWT Authentication**
+
+Upon successful login, a JWT token is generated and saved as a cookie:
 
 - **Cookie**: The token is saved in the `token` cookie with a lifespan of 8 hours.
