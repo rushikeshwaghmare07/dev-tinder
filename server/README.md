@@ -217,3 +217,98 @@ The request body must be in JSON format and include the following fields:
 Upon successful login, a JWT token is generated and saved as a cookie:
 
 - **Cookie**: The token is saved in the `token` cookie with a lifespan of 8 hours.
+
+---
+
+## Logout User -
+
+### Overview
+
+This API handles user logout by clearing the authentication token from the cookies, effectively ending the user's session.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/auth/logout`
+- ### Method: `POST`
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Example Request:
+
+- **Headers**
+
+```json
+{
+  "Authorization": "Bearer <JWT_TOKEN>"
+}
+```
+
+- **Cookies**
+
+```json
+token=<JWT_TOKEN>
+```
+
+---
+
+### Example Response:
+
+- **Success Response (201 OK)**
+
+If the logout is successful, the API returns the following response:
+
+```json
+{
+  "success": true,
+  "message": "User logged out successfully"
+}
+
+```
+
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+
+---
+
+### **Behavior**
+
+1. ***Verifies Token:***  Checks for a valid token in cookies or the Authorization header.
+
+2. ***Clears Token:*** If the token is valid, it is cleared from the cookies.
+
+3. ***Returns Success Response:*** Confirms that the user has been logged out successfully.
+---
