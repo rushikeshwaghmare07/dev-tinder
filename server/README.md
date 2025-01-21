@@ -312,3 +312,108 @@ If the logout is successful, the API returns the following response:
 
 3. ***Returns Success Response:*** Confirms that the user has been logged out successfully.
 ---
+
+## **User Profile Section**
+
+## View User Profile -
+
+### Overview
+
+This API allows an authenticated user to retrieve their profile details. The profile data includes information stored in the user's account.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/profile/view`
+- ### Method: `GET`
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Example Request:
+
+- **Headers**
+
+```json
+{
+  "Authorization": "Bearer <JWT_TOKEN>"
+}
+```
+
+- **Cookies**
+
+```json
+token=<JWT_TOKEN>
+```
+
+---
+
+### Response:
+
+- **Success Response (201 OK)**
+
+If the profile is successfully retrieved, the API returns the following response:
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "64c1234abcd567ef9012gh34",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "age": 25,
+    "gender": "male",
+    "profileUrl": "profile_image_url_if_exists",
+    "about": "Software developer with 5 years of experience.",
+    "skills": ["JavaScript", "Node.js", "MongoDB"]
+  },
+  "message": "User profile retrieved successfully"
+}
+```
+
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+
+---
+
+### **Behavior**
+
+1. ***Authentication:*** Validates the JWT token provided in the request (either in cookies or the `Authorization` header).
+
+2. ***Retrieve User Data:*** Fetches the authenticated user's details from the database.
+
+3. ***Response:*** Returns the user's profile details along with a success message.
+---
