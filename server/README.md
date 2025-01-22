@@ -632,3 +632,103 @@ The body must contain the fields to be updated in JSON format. Only the followin
 }
 ```
 ---
+---
+
+## **Connection Request Section**
+
+## Send Connection Request  -
+
+### Overview
+
+This API allows users to send connection request to each other.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/request/send/:status/:toUserId`
+- ### Method: `POST`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Path Parameters:
+
+| Parameter                | Type                     | Description                                   |
+| ------------------------ | ------------------------ | ----------------------------------------------- |
+| `status`                 | String                   | The status of the connection request. Allowed values are `"ignored"` or `"interested"`.                                 |
+| `toUserId`               | String                   | The `ObjectId` of the user to whom the connection request is being sent.                                |
+
+---
+
+### Response:
+
+- **Success Response (201 Created)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "64f1b28f4c3eab001cc8d4e5",
+    "fromUserId": "64f1b28f4c3eab001cc8d4e4",
+    "toUserId": "64f1b28f4c3eab001cc8d4e6",
+    "status": "interested",
+    "createdAt": "2025-01-21T08:00:00.000Z",
+    "updatedAt": "2025-01-21T08:00:00.000Z"
+  },
+  "message": "Connection request sent successfully."
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Error Response (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "message": "You cannot send a connection request to yourself."
+}
+```
+
+- **Error Response (404 Not Found)**
+
+```json
+{
+  "success": false,
+  "message": "The user you are trying to connect with does not exist."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+---
