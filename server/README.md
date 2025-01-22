@@ -530,3 +530,105 @@ The body must contain the fields to be updated in JSON format. Only the followin
 4. ***Response:*** Returns a success message or an appropriate error.
 
 ---
+
+## Forgot Password  -
+
+### Overview
+
+This API allows authenticated users to update their password details.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/profile/update-password`
+- ### Method: `PATCH`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Request Body:
+
+The body must contain the fields to be updated in JSON format. Only the following fields are allowed:
+
+```json
+{
+  "oldPassword": "current_password",
+  "newPassword": "new_secure_password"
+}
+```
+---
+
+### Fields and Validation Rules:
+
+- ***oldPassword*** (string, required): The user’s current password.
+- ***newPassword*** (string, required): The new password the user wants to set. Must meet the following criteria:
+  - At least 8 characters long.
+  - Includes at least one uppercase letter, one lowercase letter, one number, and one special character.
+  - Must not be the same as the old password.
+
+---
+
+### Response:
+
+- **Success Response (201 OK)**
+
+```json
+{
+  "success": true,
+  "message": "Your password has been updated successfully"
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Error Response (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "message": "New password cannot be the same as the old password"
+}
+```
+
+- **Incorrect Old Password**
+
+```json
+{
+  "success": false,
+  "message": "The current password you entered is incorrect"
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+---
