@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const authRoute = require("./routes/auth.routes.js");
 const profileRoute = require("./routes/profile.routes.js");
+const requestRoute = require("./routes/request.routes.js");
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 app.use("/api/profile", profileRoute);
+app.use("/api/request", requestRoute);
 
 module.exports = { app };
