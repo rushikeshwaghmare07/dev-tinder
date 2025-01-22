@@ -51,6 +51,63 @@ const validateSignUpData = (req) => {
   }
 };
 
+const validateUpdateProfileData = (req) => {
+  const { firstName, lastName, email, age, profileUrl, about, skills } =
+    req.body;
+
+  const allowedUpdateFiled = [
+    "firstName",
+    "lastName",
+    "email",
+    "age",
+    "gender",
+    "profileUrl",
+    "about",
+    "skills",
+  ];
+
+  const isAllowed = Object.keys(req.body).every((field) =>
+    allowedUpdateFiled.includes(field)
+  );
+
+  if (!isAllowed) {
+    throw new Error("Invalid edit request. Some fields are not allowed.");
+  }
+
+  if (firstName && !validator.isLength(firstName, { min: 2, max: 20 })) {
+    throw new Error("First name must be between 2 and 20 characters.");
+  }
+
+  if (lastName && !validator.isLength(lastName, { min: 2, max: 20 })) {
+    throw new Error("Last name must be between 2 and 20 characters.");
+  }
+
+  if (email && !validator.isEmail(email)) {
+    throw new Error("Email is not valid.");
+  }
+
+  if (age && !validator.isInt(String(age), { min: 13 })) {
+    throw new Error("Age must be a number greater than or equal to 13.");
+  }
+
+  if (profileUrl && !validator.isURL(profileUrl)) {
+    throw new Error("Invalid URL format for profileUrl.");
+  }
+
+  if (about && !validator.isLength(about, { max: 300 })) {
+    throw new Error("About section must be between 0 and 300 characters.");
+  }
+
+  if (skills) {
+    if (!Array.isArray(skills) || skills.length > 20) {
+      throw new Error("You can only provide up to 20 skills.");
+    }
+  }
+
+  return true;
+};
+
 module.exports = {
   validateSignUpData,
+  validateUpdateProfileData,
 };
