@@ -107,7 +107,22 @@ const validateUpdateProfileData = (req) => {
   return true;
 };
 
+const validatePassword = (req) => {
+  const { oldPassword, newPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    throw new Error("All fields are required");
+  }
+
+  if (newPassword && !validator.isStrongPassword(newPassword)) {
+    throw new Error(
+      "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character."
+    );
+  }
+};
+
 module.exports = {
   validateSignUpData,
   validateUpdateProfileData,
+  validatePassword,
 };
