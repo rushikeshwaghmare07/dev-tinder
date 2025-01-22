@@ -417,3 +417,116 @@ If the profile is successfully retrieved, the API returns the following response
 
 3. ***Response:*** Returns the user's profile details along with a success message.
 ---
+
+## Edit User Profile -
+
+### Overview
+
+This API allows authenticated users to update their profile details. Only specific fields can be updated, and each field is validated to ensure proper input.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/profile/edit`
+- ### Method: `PATCH`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Request Body:
+
+The body must contain the fields to be updated in JSON format. Only the following fields are allowed:
+
+```json
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com",
+  "age": 28,
+  "gender": "female",
+  "profileUrl": "https://example.com/janedoe",
+  "about": "Software engineer with expertise in full-stack development.",
+  "skills": ["React", "Node.js", "MongoDB"]
+}
+```
+---
+
+### Fields and Validation Rules:
+
+- ***firstName*** (string, optional): Min length: 2, Max length: 20.
+- ***lastName*** (string, optional): Min length: 2, Max length: 20.
+- ***email*** (string, optional): Must be a valid email address.
+- ***age*** (number, optional): Must be an integer >= 13.
+- ***gender*** (string, optional): Must be one of male, female, or others.
+- ***profileUrl*** (string, optional): Must be a valid URL.
+- ***about*** (string, optional): Max length: 300 characters.
+- ***skills*** (array of strings, optional): Each skill should have a minimum length of 3 characters, and a maximum of 20 skills can be provided.
+
+---
+
+### Response:
+
+- **Success Response (201 OK)**
+
+```json
+{
+  "success": true,
+  "message": "Jane, your profile is updated successfully."
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Error Response (400 Bad Request)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Invalid edit request"
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+---
+
+### **Behavior**
+
+1. ***Authentication:*** Validates the JWT token provided in the request (either in cookies or the Authorization header).
+2. ***Validation:*** Ensures only allowed fields are updated and validates the values provided for each field.
+3. ***Update Profile:*** Applies updates to the authenticated user's profile and saves them to the database.
+4. ***Response:*** Returns a success message or an appropriate error.
+
+---
