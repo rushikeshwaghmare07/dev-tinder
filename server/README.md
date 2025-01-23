@@ -732,3 +732,100 @@ The request must include the authentication token as either:
 }
 ```
 ---
+
+## Review Connection Request -
+
+### Overview
+
+This API allows users to send connection request to each other.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/request/review/:requestId/:newStatus`
+- ### Method: `PATCH`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Path Parameters:
+
+| Parameter                | Type                     | Description                                   |
+| ------------------------ | ------------------------ | ----------------------------------------------- |
+| `status`                 | String                   | The new status of the connection request (`accepted` or `rejected`).                               |
+| `requestId`               | String                   | The unique ObjectId of the connection request to review.                                |
+
+---
+
+### Response:
+
+- **Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "64f1b28f4c3eab001cc8d4e5",
+    "fromUserId": "64f1b28f4c3eab001cc8d4e4",
+    "toUserId": "64f1b28f4c3eab001cc8d4e6",
+    "status": "accepted",
+    "createdAt": "2025-01-21T08:00:00.000Z",
+    "updatedAt": "2025-01-21T08:05:00.000Z"
+  },
+  "message": "Connection request has been accepted."
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Error Response (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "message": "Invalid review status. Allowed statuses are 'accepted' or 'rejected'."
+}
+```
+
+- **Error Response (404 Not Found)**
+
+```json
+{
+  "success": false,
+  "message": "No pending connection request found for this user."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Internal Server Error."
+}
+```
+---
