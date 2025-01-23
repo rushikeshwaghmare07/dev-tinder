@@ -907,3 +907,87 @@ The request must include the authentication token as either:
 }
 ```
 ---
+
+## Get Connections Functionality -
+
+### Overview
+
+The "Get Connections" API endpoint retrieves all accepted connections for the authenticated user. Connections can either be initiated by the user or received from another user. The endpoint ensures the user can see their established connections in a paginated format for better performance and usability.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/user/connections`
+- ### Method: `GET`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Response:
+
+- **Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "64f1b28f4c3eab001cc8d4e4",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "profileUrl": "https://geographyandyou.com/images/user-profile.png",
+      "age": 28,
+      "gender": "female",
+      "about": "Frontend developer specializing in React.",
+      "skills": ["React", "CSS", "HTML"]
+    },
+    {
+      "_id": "64f1b28f4c3eab001cc8d4e5",
+      "firstName": "John",
+      "lastName": "Doe",
+      "profileUrl": "https://geographyandyou.com/images/user-profile.png",
+      "age": 30,
+      "gender": "male",
+      "about": "Software engineer with 8 years of experience.",
+      "skills": ["JavaScript", "Node.js", "MongoDB"]
+    }
+  ],
+  "message": "Connections fetched successfully."
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch connections. please try again later."
+}
+```
+---
