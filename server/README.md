@@ -737,7 +737,7 @@ The request must include the authentication token as either:
 
 ### Overview
 
-This API allows users to send connection request to each other.
+This API allows review its connection request. it can be accepted or rejected.
 
 ---
 
@@ -826,6 +826,84 @@ The request must include the authentication token as either:
 {
   "success": false,
   "message": "Internal Server Error."
+}
+```
+---
+
+## Get Received Connection Requests -
+
+### Overview
+
+This API allows users to get his all the connection requests that he received.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/user/connections/requests/received`
+- ### Method: `GET`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Response:
+
+- **Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "64f1b28f4c3eab001cc8d4e5",
+      "fromUserId": {
+        "_id": "64f1b28f4c3eab001cc8d4e4",
+        "firstName": "John",
+        "lastName": "Doe",
+        "profileUrl": "https://geographyandyou.com/images/user-profile.png",
+        "skills": ["JavaScript", "React", "Node.js"],
+        "about": "Full-stack developer with 5 years of experience.",
+      },
+      "status": "interested",
+      "createdAt": "2025-01-21T08:00:00.000Z",
+      "updatedAt": "2025-01-21T08:05:00.000Z",
+    },
+  ],
+  "message": "Connection requests retrieved successfully.",
+}
+```
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+ If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "Failed to fetch connection requests. Please try again later."
 }
 ```
 ---
