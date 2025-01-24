@@ -1,4 +1,5 @@
 const ConnectionRequest = require("../models/connectionRequest.model.js");
+const User = require("../models/user.model.js");
 
 const getReceivedConnectionRequests = async (req, res) => {
   try {
@@ -59,7 +60,41 @@ const getConnections = async (req, res) => {
   }
 };
 
+const feed = async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId  toUserId");
+
+    const hideUsersFromFeed = new Set();
+    connectionRequests.forEach((req) => {
+      hideUsersFromFeed.add(req.fromUserId.toString());
+      hideUsersFromFeed.add(req.toUserId.toString());
+    });
+
+    const users = await User.find({
+      $and: [
+        { _id: { $nin: Array.from(hideUsersFromFeed) } },
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
+
+    res.json({ data: users });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error?.message || "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   getReceivedConnectionRequests,
   getConnections,
+  feed,
 };
