@@ -93,11 +93,11 @@ const feed = async (req, res) => {
     }).select("fromUserId  toUserId");
 
     // Collect user IDs to hide from the feed
-    const hideUsersFromFeed = new Set([
-      ...connectionRequests.map((req) => req.fromUserId.toString()),
-      ...connectionRequests.map((req) => req.toUserId.toString()),
-      loggedInUser._id.toString(),
-    ]);
+    const hideUsersFromFeed = new Set();
+    connectionRequests.forEach((req) => {
+      hideUsersFromFeed.add(req.fromUserId.toString());
+      hideUsersFromFeed.add(req.toUserId.toString());
+    });
 
     const totalUsers = await User.countDocuments({
       _id: { $nin: Array.from(hideUsersFromFeed) },
@@ -105,7 +105,10 @@ const feed = async (req, res) => {
 
     // Fetch users not connected to the logged-in user
     const users = await User.find({
-      _id: { $nin: Array.from(hideUsersFromFeed) },
+      $and: [
+        { _id: { $nin: Array.from(hideUsersFromFeed) } },
+        { _id: { $ne: loggedInUser._id } },
+      ],
     })
       .select("firstName lastName profileUrl age gender about skills")
       .skip(skip)
