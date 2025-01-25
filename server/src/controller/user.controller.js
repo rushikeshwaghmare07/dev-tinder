@@ -6,7 +6,7 @@ const getReceivedConnectionRequests = async (req, res) => {
     const loggedInUser = req.user;
 
     // Find connection requests sent to the logged-in user
-    const user = await ConnectionRequest.find({
+    const requests = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
     }).populate({
@@ -14,9 +14,17 @@ const getReceivedConnectionRequests = async (req, res) => {
       select: "firstName lastName profileUrl age gender about skills",
     });
 
-    res.status(200).json({
+    if (!requests || requests.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No connection requests found.",
+      });
+    }
+
+    return res.status(200).json({
       success: true,
-      data: user,
+      data: requests,
       message: "Connection requests retrieved successfully.",
     });
   } catch (error) {
@@ -24,7 +32,7 @@ const getReceivedConnectionRequests = async (req, res) => {
       success: false,
       message:
         error?.message ||
-        "Failed to fetch connection requests. Please try again later.",
+        "An error occurred while fetching connection requests. Please try again later.",
     });
   }
 };
@@ -33,7 +41,7 @@ const getConnections = async (req, res) => {
   try {
     const loggedInUser = req.user;
 
-    const connectionData = await ConnectionRequest.find({
+    const connections = await ConnectionRequest.find({
       $or: [
         { toUserId: loggedInUser._id, status: "accepted" },
         { fromUserId: loggedInUser._id, status: "accepted" },
@@ -43,19 +51,29 @@ const getConnections = async (req, res) => {
       select: "firstName lastName profileUrl age gender about skills",
     });
 
-    const data = connectionData.map((row) => row.fromUserId);
+    if (!connections || connections.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No connections found.",
+      });
+    }
+
+    const connectionData = connections.map(
+      (connection) => connection.fromUserId
+    );
 
     return res.status(200).json({
       success: true,
-      data: data,
-      message: "All connection fetched successfully.",
+      data: connectionData,
+      message: "Connections retrieved successfully.",
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
       message:
         error?.message ||
-        "Failed to fetch connections. please try again later.",
+        "An error occurred while fetching connections. Please try again later.",
     });
   }
 };
@@ -64,31 +82,40 @@ const feed = async (req, res) => {
   try {
     const loggedInUser = req.user;
 
+    // Find all connection requests involving the logged-in user
     const connectionRequests = await ConnectionRequest.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
     }).select("fromUserId  toUserId");
 
-    const hideUsersFromFeed = new Set();
-    connectionRequests.forEach((req) => {
-      hideUsersFromFeed.add(req.fromUserId.toString());
-      hideUsersFromFeed.add(req.toUserId.toString());
-    });
+    // Collect user IDs to hide from the feed
+    const hideUsersFromFeed = new Set([
+      ...connectionRequests.map((req) => req.fromUserId.toString()),
+      ...connectionRequests.map((req) => req.toUserId.toString()),
+      loggedInUser._id.toString(),
+    ]);
 
+    // Fetch users not connected to the logged-in user
     const users = await User.find({
-      $and: [
-        { _id: { $nin: Array.from(hideUsersFromFeed) } },
-        { _id: { $ne: loggedInUser._id } },
-      ],
-    })
-      .select(USER_SAFE_DATA)
-      .skip(skip)
-      .limit(limit);
+      _id: { $nin: Array.from(hideUsersFromFeed) },
+    }).select("firstName lastName profileUrl age gender about skills");
 
-    res.json({ data: users });
+    if (!users || users.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No users available for your feed.",
+      });
+    }
+
+    return res.status(200).json({ 
+      success: true,
+      data: users,
+      message: "Feed retrieved successfully.",
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error?.message || "Internal Server Error",
+      message: error?.message || "An error occurred while fetching the feed. Please try again later.",
     });
   }
 };
