@@ -82,6 +82,11 @@ const feed = async (req, res) => {
   try {
     const loggedInUser = req.user;
 
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    limit = limit > 50 ? 50 : limit;
+    const skip = (page - 1) * limit;
+
     // Find all connection requests involving the logged-in user
     const connectionRequests = await ConnectionRequest.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
@@ -94,10 +99,17 @@ const feed = async (req, res) => {
       loggedInUser._id.toString(),
     ]);
 
+    const totalUsers = await User.countDocuments({
+      _id: { $nin: Array.from(hideUsersFromFeed) },
+    });
+
     // Fetch users not connected to the logged-in user
     const users = await User.find({
       _id: { $nin: Array.from(hideUsersFromFeed) },
-    }).select("firstName lastName profileUrl age gender about skills");
+    })
+      .select("firstName lastName profileUrl age gender about skills")
+      .skip(skip)
+      .limit(limit);
 
     if (!users || users.length === 0) {
       return res.status(200).json({
@@ -107,15 +119,22 @@ const feed = async (req, res) => {
       });
     }
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       success: true,
       data: users,
+      metadata: {
+        currentPage: page,
+        totalPages: Math.ceil(totalUsers / limit),
+        totalRecords: totalUsers,
+      },
       message: "Feed retrieved successfully.",
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error?.message || "An error occurred while fetching the feed. Please try again later.",
+      message:
+        error?.message ||
+        "An error occurred while fetching the feed. Please try again later.",
     });
   }
 };
