@@ -63,7 +63,6 @@ The request body must be in JSON format and include the following fields:
     "email": "john.doe@example.com",
     "age": "25",
     "gender": "male",
-    "profileUrl": "profile_image_url_if_exists",
     "about": "Software developer with 5 years of experience.",
     "skills": ["JavaScript", "Node.js", "MongoDB"]
   }
@@ -200,15 +199,15 @@ The request body must be in JSON format and include the following fields:
 
 ### **Behavior**
 
-1. ***Validates Input:*** Ensures that the email and password fields are provided
+1. **_Validates Input:_** Ensures that the email and password fields are provided
 
-2. ***Checks User Existence:*** Looks up the user by email in the database. If the user is not found, it returns an unauthorized response.
+2. **_Checks User Existence:_** Looks up the user by email in the database. If the user is not found, it returns an unauthorized response.
 
-3. ***Validates Password:*** Compares the provided password with the hashed password stored in the database. If the password is incorrect, it returns an unauthorized response.
+3. **_Validates Password:_** Compares the provided password with the hashed password stored in the database. If the password is incorrect, it returns an unauthorized response.
 
-4. ***Generates JWT Token:*** Upon successful authentication, generates a JWT token for the user.
+4. **_Generates JWT Token:_** Upon successful authentication, generates a JWT token for the user.
 
-5. ***Sets Cookie:*** The token is stored in a cookie for authentication in subsequent requests.
+5. **_Sets Cookie:_** The token is stored in a cookie for authentication in subsequent requests.
 
 ---
 
@@ -273,7 +272,6 @@ If the logout is successful, the API returns the following response:
   "success": true,
   "message": "User logged out successfully"
 }
-
 ```
 
 ---
@@ -282,7 +280,7 @@ If the logout is successful, the API returns the following response:
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -306,11 +304,12 @@ If the logout is successful, the API returns the following response:
 
 ### **Behavior**
 
-1. ***Verifies Token:***  Checks for a valid token in cookies or the Authorization header.
+1. **_Verifies Token:_** Checks for a valid token in cookies or the Authorization header.
 
-2. ***Clears Token:*** If the token is valid, it is cleared from the cookies.
+2. **_Clears Token:_** If the token is valid, it is cleared from the cookies.
 
-3. ***Returns Success Response:*** Confirms that the user has been logged out successfully.
+3. **_Returns Success Response:_** Confirms that the user has been logged out successfully.
+
 ---
 
 ## **User Profile Section**
@@ -387,7 +386,7 @@ If the profile is successfully retrieved, the API returns the following response
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -411,11 +410,12 @@ If the profile is successfully retrieved, the API returns the following response
 
 ### **Behavior**
 
-1. ***Authentication:*** Validates the JWT token provided in the request (either in cookies or the `Authorization` header).
+1. **_Authentication:_** Validates the JWT token provided in the request (either in cookies or the `Authorization` header).
 
-2. ***Retrieve User Data:*** Fetches the authenticated user's details from the database.
+2. **_Retrieve User Data:_** Fetches the authenticated user's details from the database.
 
-3. ***Response:*** Returns the user's profile details along with a success message.
+3. **_Response:_** Returns the user's profile details along with a success message.
+
 ---
 
 ## Edit User Profile -
@@ -454,23 +454,23 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "email": "jane.doe@example.com",
   "age": 28,
   "gender": "female",
-  "profileUrl": "https://example.com/janedoe",
   "about": "Software engineer with expertise in full-stack development.",
   "skills": ["React", "Node.js", "MongoDB"]
 }
 ```
+
 ---
 
 ### Fields and Validation Rules:
 
-- ***firstName*** (string, optional): Min length: 2, Max length: 20.
-- ***lastName*** (string, optional): Min length: 2, Max length: 20.
-- ***email*** (string, optional): Must be a valid email address.
-- ***age*** (number, optional): Must be an integer >= 13.
-- ***gender*** (string, optional): Must be one of male, female, or others.
-- ***profileUrl*** (string, optional): Must be a valid URL.
-- ***about*** (string, optional): Max length: 300 characters.
-- ***skills*** (array of strings, optional): Each skill should have a minimum length of 3 characters, and a maximum of 20 skills can be provided.
+- **_firstName_** (string, optional): Min length: 2, Max length: 20.
+- **_lastName_** (string, optional): Min length: 2, Max length: 20.
+- **_email_** (string, optional): Must be a valid email address.
+- **_age_** (number, optional): Must be an integer >= 13.
+- **_gender_** (string, optional): Must be one of male, female, or others.
+- **_profileUrl_** (string, optional): Must be a valid URL.
+- **_about_** (string, optional): Max length: 300 characters.
+- **_skills_** (array of strings, optional): Each skill should have a minimum length of 3 characters, and a maximum of 20 skills can be provided.
 
 ---
 
@@ -484,13 +484,14 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "message": "Jane, your profile is updated successfully."
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -501,7 +502,7 @@ The body must contain the fields to be updated in JSON format. Only the followin
 
 - **Error Response (400 Bad Request)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -520,18 +521,19 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "message": "Internal Server Error."
 }
 ```
+
 ---
 
 ### **Behavior**
 
-1. ***Authentication:*** Validates the JWT token provided in the request (either in cookies or the Authorization header).
-2. ***Validation:*** Ensures only allowed fields are updated and validates the values provided for each field.
-3. ***Update Profile:*** Applies updates to the authenticated user's profile and saves them to the database.
-4. ***Response:*** Returns a success message or an appropriate error.
+1. **_Authentication:_** Validates the JWT token provided in the request (either in cookies or the Authorization header).
+2. **_Validation:_** Ensures only allowed fields are updated and validates the values provided for each field.
+3. **_Update Profile:_** Applies updates to the authenticated user's profile and saves them to the database.
+4. **_Response:_** Returns a success message or an appropriate error.
 
 ---
 
-## Forgot Password  -
+## Forgot Password -
 
 ### Overview
 
@@ -566,12 +568,13 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "newPassword": "new_secure_password"
 }
 ```
+
 ---
 
 ### Fields and Validation Rules:
 
-- ***oldPassword*** (string, required): The user’s current password.
-- ***newPassword*** (string, required): The new password the user wants to set. Must meet the following criteria:
+- **_oldPassword_** (string, required): The user’s current password.
+- **_newPassword_** (string, required): The new password the user wants to set. Must meet the following criteria:
   - At least 8 characters long.
   - Includes at least one uppercase letter, one lowercase letter, one number, and one special character.
   - Must not be the same as the old password.
@@ -588,13 +591,14 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "message": "Your password has been updated successfully"
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -631,12 +635,14 @@ The body must contain the fields to be updated in JSON format. Only the followin
   "message": "Internal Server Error."
 }
 ```
+
 ---
+
 ---
 
 ## **Connection Request Section**
 
-## Send Connection Request  -
+## Send Connection Request -
 
 ### Overview
 
@@ -663,10 +669,10 @@ The request must include the authentication token as either:
 
 ### Path Parameters:
 
-| Parameter                | Type                     | Description                                   |
-| ------------------------ | ------------------------ | ----------------------------------------------- |
-| `status`                 | String                   | The status of the connection request. Allowed values are `"ignored"` or `"interested"`.                                 |
-| `toUserId`               | String                   | The `ObjectId` of the user to whom the connection request is being sent.                                |
+| Parameter  | Type   | Description                                                                             |
+| ---------- | ------ | --------------------------------------------------------------------------------------- |
+| `status`   | String | The status of the connection request. Allowed values are `"ignored"` or `"interested"`. |
+| `toUserId` | String | The `ObjectId` of the user to whom the connection request is being sent.                |
 
 ---
 
@@ -688,13 +694,14 @@ The request must include the authentication token as either:
   "message": "Connection request sent successfully."
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -731,6 +738,7 @@ The request must include the authentication token as either:
   "message": "Internal Server Error."
 }
 ```
+
 ---
 
 ## Review Connection Request -
@@ -760,10 +768,10 @@ The request must include the authentication token as either:
 
 ### Path Parameters:
 
-| Parameter                | Type                     | Description                                   |
-| ------------------------ | ------------------------ | ----------------------------------------------- |
-| `status`                 | String                   | The new status of the connection request (`accepted` or `rejected`).                               |
-| `requestId`               | String                   | The unique ObjectId of the connection request to review.                                |
+| Parameter   | Type   | Description                                                          |
+| ----------- | ------ | -------------------------------------------------------------------- |
+| `status`    | String | The new status of the connection request (`accepted` or `rejected`). |
+| `requestId` | String | The unique ObjectId of the connection request to review.             |
 
 ---
 
@@ -785,13 +793,14 @@ The request must include the authentication token as either:
   "message": "Connection request has been accepted."
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -828,6 +837,7 @@ The request must include the authentication token as either:
   "message": "Internal Server Error."
 }
 ```
+
 ---
 
 ## Get Received Connection Requests -
@@ -869,25 +879,25 @@ The request must include the authentication token as either:
         "_id": "64f1b28f4c3eab001cc8d4e4",
         "firstName": "John",
         "lastName": "Doe",
-        "profileUrl": "https://geographyandyou.com/images/user-profile.png",
         "skills": ["JavaScript", "React", "Node.js"],
-        "about": "Full-stack developer with 5 years of experience.",
+        "about": "Full-stack developer with 5 years of experience."
       },
       "status": "interested",
       "createdAt": "2025-01-21T08:00:00.000Z",
-      "updatedAt": "2025-01-21T08:05:00.000Z",
-    },
+      "updatedAt": "2025-01-21T08:05:00.000Z"
+    }
   ],
-  "message": "Connection requests retrieved successfully.",
+  "message": "Connection requests retrieved successfully."
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -906,6 +916,7 @@ The request must include the authentication token as either:
   "message": "Failed to fetch connection requests. Please try again later."
 }
 ```
+
 ---
 
 ## Get Connections Functionality -
@@ -945,7 +956,6 @@ The request must include the authentication token as either:
       "_id": "64f1b28f4c3eab001cc8d4e4",
       "firstName": "Jane",
       "lastName": "Smith",
-      "profileUrl": "https://geographyandyou.com/images/user-profile.png",
       "age": 28,
       "gender": "female",
       "about": "Frontend developer specializing in React.",
@@ -955,7 +965,6 @@ The request must include the authentication token as either:
       "_id": "64f1b28f4c3eab001cc8d4e5",
       "firstName": "John",
       "lastName": "Doe",
-      "profileUrl": "https://geographyandyou.com/images/user-profile.png",
       "age": 30,
       "gender": "male",
       "about": "Software engineer with 8 years of experience.",
@@ -965,13 +974,14 @@ The request must include the authentication token as either:
   "message": "Connections fetched successfully."
 }
 ```
+
 ---
 
 ### Error Responses
 
 - **Unauthorized (401 Unauthorized)**
 
- If the user is not authenticated or the token is invalid:
+If the user is not authenticated or the token is invalid:
 
 ```json
 {
@@ -990,4 +1000,127 @@ The request must include the authentication token as either:
   "message": "Failed to fetch connections. please try again later."
 }
 ```
+
+---
+
+## Feed API -
+
+### Overview
+
+This API fetches a paginated list of users who are not already connected to or have sent/received connection requests from the logged-in user. It excludes the logged-in user from the feed as well.
+
+---
+
+### Endpoints
+
+- ### URL: `/api/user/feed`
+- ### Method: `GET`
+- ### Authentication Required: Yes (JWT Token)
+
+---
+
+### Headers:
+
+The request must include the authentication token as either:
+
+- A cookie named `token`.
+- A Bearer token in the `Authorization` header.
+
+---
+
+### Path Parameters:
+
+| Parameter | Type    | Description                                    | Default | Constraints   |
+| --------- | ------- | ---------------------------------------------- | ------- | ------------- |
+| `page`    | Integer | The page number for pagination.                | `1`     | Must be ≥ 1   |
+| `limit`   | Integer | The maximum number of users to fetch per page. | `10`    | Max value: 50 |
+
+---
+
+### Response:
+
+- **Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "userId1",
+      "firstName": "John",
+      "lastName": "Doe",
+      "age": 25,
+      "gender": "male",
+      "about": "Software Developer",
+      "skills": ["JavaScript", "Node.js", "React"]
+    },
+    {
+      "_id": "userId2",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "age": 30,
+      "gender": "female",
+      "about": "Data Scientist",
+      "skills": ["Python", "Machine Learning", "Data Analysis"]
+    }
+  ],
+  "metadata": {
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalRecords": 50
+  },
+  "message": "Feed retrieved successfully."
+}
+```
+
+- **Empty Feed Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [],
+  "metadata": {
+    "currentPage": 1,
+    "totalPages": 0,
+    "totalRecords": 0
+  },
+  "message": "No users available for your feed."
+}
+```
+
+---
+
+### Error Responses
+
+- **Unauthorized (401 Unauthorized)**
+
+If the user is not authenticated or the token is invalid:
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized."
+}
+```
+
+- **Validation Errors (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "message": "Invalid query parameters. Page must be ≥ 1 and limit must be ≤ 50."
+}
+```
+
+- **Internal Server Error (500 Internal Server Error)**
+
+  In case of server-related issues:
+
+```json
+{
+  "success": false,
+  "message": "An error occurred while fetching the feed. Please try again later."
+}
+```
+
 ---
