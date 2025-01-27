@@ -1,12 +1,16 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Body from "./components/Body";
 
 const App = () => {
   return (
-    <div>
-      <button class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900">
-        Button
-      </button>
-    </div>
+    <>
+      <BrowserRouter basename="/">
+        <Routes>
+          <Route path="/" element={<Body />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 
