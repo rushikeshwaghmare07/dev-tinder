@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { CodeXml } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../utils/constants";
@@ -12,19 +13,28 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${BACKEND_URL}/api/auth/logout`, {}, {withCredentials: true})
+      await axios.post(
+        `${BACKEND_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
       dispatch(removeUser());
       return navigate("/login");
     } catch (error) {
-      console.error("Logout User Error: ", error.response?.data || error.message);
+      console.error(
+        "Logout User Error: ",
+        error.response?.data || error.message
+      );
     }
-  }
+  };
 
   return (
     <>
-      <div className="navbar bg-base-200">
+      <div className="navbar text-white ">
         <div className="flex-1">
-          <Link to={"/"} className="btn btn-ghost text-xl">DevTinder</Link>
+          <Link to={"/"} className="btn btn-ghost text-xl">
+            <CodeXml size={30} className="text-green-500" /> DevTinder{" "}
+          </Link>
         </div>
         {user && (
           <div className="flex items-center px-2">
