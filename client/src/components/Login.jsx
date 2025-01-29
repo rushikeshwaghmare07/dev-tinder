@@ -3,10 +3,12 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../utils/constants";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,7 +17,7 @@ const Login = () => {
       e.preventDefault();
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+        `${BACKEND_URL}/api/auth/login`,
         {
           email,
           password,
@@ -25,7 +27,7 @@ const Login = () => {
       dispatch(addUser(data));
       return navigate("/");
     } catch (error) {
-      console.log(error.message);
+      setError(error.response?.data?.message || "An error occurred. Please try again.");
     }
   };
 
@@ -53,6 +55,7 @@ const Login = () => {
             placeholder="Password"
           />
 
+          <p className="text-red-400">{error}</p>
           <button className="btn btn-accent mt-5 rounded-full">Login</button>
         </fieldset>
       </form>
