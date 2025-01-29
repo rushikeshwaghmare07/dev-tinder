@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReduce from "../features/user/userSlice.js";
+import userReducer from "../features/user/userSlice.js";
+import feedReducer from "../features/feed/feedSlice.js";
 
 export const store = configureStore({
   reducer: {
-    user: userReduce,
+    user: userReducer,
+    feed: feedReducer,
   },
 });
