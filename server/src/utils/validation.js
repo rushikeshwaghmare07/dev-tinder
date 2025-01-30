@@ -58,7 +58,6 @@ const validateUpdateProfileData = (req) => {
   const allowedUpdateFiled = [
     "firstName",
     "lastName",
-    "email",
     "age",
     "gender",
     "profileUrl",
@@ -70,8 +69,8 @@ const validateUpdateProfileData = (req) => {
     allowedUpdateFiled.includes(field)
   );
 
-  if (!isAllowed) {
-    throw new Error("Invalid edit request. Some fields are not allowed.");
+  if (isAllowed) {
+    return isAllowed;
   }
 
   if (firstName && !validator.isLength(firstName, { min: 2, max: 20 })) {
