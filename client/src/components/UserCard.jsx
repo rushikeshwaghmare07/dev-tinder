@@ -5,7 +5,7 @@ const UserCard = ({ user }) => {
     return <p className="text-center text-gray-500">Loading user...</p>;
   }
 
-  const { _id, firstName, lastName, profileUrl, age, gender, about } = user;
+  const { firstName, lastName, profileUrl, age, gender, about } = user;
 
   return (
     <>
@@ -20,6 +20,7 @@ const UserCard = ({ user }) => {
             alt={firstName || "User"}
           />
         </figure>
+
         <div className="card-body text-center p-4">
           <h2 className="card-title flex justify-center text-lg font-bold">
             {firstName} {lastName}
