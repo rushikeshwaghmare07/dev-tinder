@@ -16,7 +16,7 @@ const Login = () => {
     try {
       e.preventDefault();
 
-      const { data } = await axios.post(
+      const res = await axios.post(
         `${BACKEND_URL}/api/auth/login`,
         {
           email,
@@ -24,10 +24,12 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      dispatch(addUser(data));
+      dispatch(addUser(res?.data?.data));
       return navigate("/");
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred. Please try again.");
+      setError(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
 
