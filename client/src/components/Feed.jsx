@@ -11,11 +11,11 @@ const Feed = () => {
 
   const getFeed = async () => {
     try {
-      const { data } = await axios.get(`${BACKEND_URL}/api/user/feed`, {
+      const res = await axios.get(`${BACKEND_URL}/api/user/feed`, {
         withCredentials: true,
       });
 
-      dispatch(addFeed(data?.data));
+      dispatch(addFeed(res?.data?.data));
     } catch (error) {
       console.log(
         error.response?.data?.message || "An error occurred. Please try again."
