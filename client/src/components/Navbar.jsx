@@ -1,10 +1,10 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { CodeXml } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../utils/constants";
-import { removeUser } from "../features/user/userSlice";
+import { removeUser, addUser } from "../features/user/userSlice";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -28,6 +28,21 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/profile/view`, {
+          withCredentials: true,
+        });
+        dispatch(addUser(res?.data?.data));
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, [dispatch]);
+
   return (
     <>
       <div className="navbar text-white ">
@@ -38,11 +53,7 @@ const Navbar = () => {
         </div>
         {user && (
           <div className="flex items-center px-2">
-            <p className="px-3">
-              Welcome,{" "}
-              {user.data.firstName.charAt(0).toUpperCase() +
-                user.data.firstName.slice(1)}
-            </p>
+            <p className="px-3">Welcome, {user?.firstName}</p>
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -50,7 +61,7 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img alt="user avatar" src={user.data.profileUrl} />
+                  <img alt="user avatar" src={user?.profileUrl} />
                 </div>
               </div>
               <ul
