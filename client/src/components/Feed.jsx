@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BACKEND_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addFeed } from "../features/feed/feedSlice";
+import { addFeed } from "../app/features/feed/feedSlice";
 import UserCard from "./UserCard";
 
 const Feed = () => {
@@ -10,11 +10,11 @@ const Feed = () => {
   const dispatch = useDispatch();
 
   const getFeed = async () => {
+    if (feed) return;
     try {
       const res = await axios.get(`${BACKEND_URL}/api/user/feed`, {
         withCredentials: true,
       });
-
       dispatch(addFeed(res?.data?.data));
     } catch (error) {
       console.log(
@@ -27,9 +27,14 @@ const Feed = () => {
     getFeed();
   }, []);
 
+  if (!feed) return;
+
+  if (feed.length <= 0)
+    return <h1 className="flex justify-center my-10">No new users founds!</h1>;
+
   return (
     <div className="flex justify-center mt-2">
-      {feed.length > 0 ? <UserCard user={feed[0]} /> : <h1>No users found</h1>}
+       <UserCard user={feed[0]} />
     </div>
   );
 };
