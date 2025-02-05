@@ -3,56 +3,43 @@ import UserCard from "./UserCard";
 import axios from "axios";
 import { BACKEND_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
-import { addUser } from "../features/user/userSlice";
+import { addUser } from "../app/features/user/userSlice";
 
 const EditProfile = ({ user }) => {
-  const [firstName, setFirstName] = useState(user?.firstName || "");
-  const [lastName, setLastName] = useState(user?.lastName || "");
-  const [profileUrl, setProfileUrl] = useState(user?.profileUrl || "");
-  const [age, setAge] = useState(user?.age || "");
-  const [gender, setGender] = useState(user?.gender || "");
-  const [about, setAbout] = useState(user?.about || "");
+  const [firstName, setFirstName] = useState(user?.data?.firstName || "");
+  const [lastName, setLastName] = useState(user?.data?.lastName || "");
+  const [profileUrl, setProfileUrl] = useState(user?.data?.profileUrl || "");
+  const [age, setAge] = useState(user?.data?.age || "");
+  const [gender, setGender] = useState(user?.data?.gender || "");
+  const [about, setAbout] = useState(user?.data?.about || "");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
 
-  const handleUpdate = async (e) => {
+  const updateProfile = async () => {
     setError("");
     try {
-      e.preventDefault();
-
       const res = await axios.patch(
         `${BACKEND_URL}/api/profile/edit`,
-        { firstName, lastName, age, gender, about, profileUrl },
+        {
+          firstName,
+          lastName,
+          profileUrl,
+          age,
+          gender,
+          about,
+        },
         { withCredentials: true }
       );
-
       dispatch(addUser(res?.data?.data));
-    } catch (error) {
-      setError(
-        error.response?.message || "An error occurred. Please try again."
-      );
+    } catch (err) {
+      setError(err.response.data);
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      setFirstName(user.firstName || "");
-      setLastName(user.lastName || "");
-      setProfileUrl(user.profileUrl || "");
-      setAge(user.age || "");
-      setGender(user.gender || "");
-      setAbout(user.about || "");
-    }
-  }, [user]);
-
   return (
     <>
       <div className="flex justify-center items-center gap-15">
         <div className="flex justify-center items-center h-screen">
-          <form
-            onSubmit={handleUpdate}
-            className="bg-base-300 p-8 shadow-lg rounded-lg w-96"
-          >
+          <form className="bg-base-300 p-8 shadow-lg rounded-lg w-96">
             <h2 className="text-2xl font-semibold text-center mb-4">
               Edit Profile
             </h2>
@@ -102,13 +89,18 @@ const EditProfile = ({ user }) => {
               ></textarea>
             </div>
             <p className="text-red-400 text-center mt-2">{error}</p>
-            <button className="btn btn-accent text-black w-full mt-4 p-2 rounded-lg">
+            <button
+              onClick={updateProfile}
+              className="btn btn-accent text-black w-full mt-4 p-2 rounded-lg"
+            >
               Update Profile
             </button>
           </form>
         </div>
 
-        <UserCard user={user} />
+        <UserCard
+          user={{ firstName, lastName, profileUrl, age, gender, about }}
+        />
       </div>
     </>
   );
