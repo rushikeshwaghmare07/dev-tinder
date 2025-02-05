@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { addUser } from "../features/user/userSlice";
+import { addUser } from "../app/features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../utils/constants";
 
@@ -24,11 +24,11 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      dispatch(addUser(res?.data?.data));
+      dispatch(addUser(res.data));
       return navigate("/");
     } catch (error) {
       setError(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data || "An error occurred. Please try again."
       );
     }
   };
