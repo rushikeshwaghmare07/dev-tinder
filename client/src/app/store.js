@@ -8,7 +8,7 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
     feed: feedReducer,
-    connection: connectionReducer,
+    connections: connectionReducer,
     requests: requestReducer,
   },
 });
