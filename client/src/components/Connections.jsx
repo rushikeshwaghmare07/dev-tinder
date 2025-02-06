@@ -27,7 +27,7 @@ const Connections = () => {
   if (connections.length === 0)
     return (
       <h1 className="text-center text-gray-600 text-2xl mt-10">
-        No Pending Connection Requests
+        No Connections Found
       </h1>
     );
 
