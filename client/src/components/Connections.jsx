@@ -27,7 +27,7 @@ const Connections = () => {
   if (connections.length === 0)
     return (
       <h1 className="text-center text-gray-600 text-2xl mt-10">
-        No Connections Found
+        No Connections Found!!
       </h1>
     );
 
@@ -40,25 +40,33 @@ const Connections = () => {
           connection;
 
         return (
-          <div className="flex items-center w-full bg-base-300 rounded-lg m-1 p-4 hover:bg-base-200 transition"
+          <div
+            className="flex items-center w-full bg-base-300 rounded-lg m-1 p-4 hover:bg-base-200 transition"
             key={_id}
           >
             <div>
               <img
                 alt="User Profile"
                 className="w-14 h-14 rounded-full object-cover border-2 border-secondary"
-                src={profileUrl ||
-                  "https://geographyandyou.com/images/user-profile.png"}
+                src={
+                  profileUrl ||
+                  "https://geographyandyou.com/images/user-profile.png"
+                }
               />
             </div>
             <div className="ml-4 px-1 flex-1">
               <h2 className="font-bold text-lg text-gray-300">
-              {firstName} {lastName}
+                {firstName} {lastName}
               </h2>
-              {age && gender && <p className="text-gray-400 text-sm">{age}, {gender}</p>}
-              <p className="text-gray-400 text-sm mt-1">{about || "No about info available."}</p>
+              {age && gender && (
+                <p className="text-gray-400 text-sm">
+                  {age}, {gender}
+                </p>
+              )}
+              <p className="text-gray-400 text-sm mt-1">
+                {about || "No about info available."}
+              </p>
             </div>
-            
           </div>
         );
       })}
