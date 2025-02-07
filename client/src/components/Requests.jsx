@@ -2,14 +2,16 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BACKEND_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../app/features/requests/requestSlice";
-import { Heart, X } from "lucide-react";
+import {
+  addRequests,
+  removeRequest,
+} from "../app/features/requests/requestSlice";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
 
-  const reviewRequest = async () => {
+  const fetchRequest = async () => {
     try {
       const res = await axios.get(
         `${BACKEND_URL}/api/user/connections/requests/received`,
@@ -23,8 +25,21 @@ const Requests = () => {
     }
   };
 
+  const reviewRequest = async (status, _id) => {
+    try {
+      const res = await axios.patch(
+        `${BACKEND_URL}/api/request/review/${status}/${_id}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeRequest(_id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    reviewRequest();
+    fetchRequest();
   }, []);
 
   if (!requests) return;
@@ -74,10 +89,16 @@ const Requests = () => {
               </p>
             </div>
             <div className="flex gap-2">
-              <button className="px-3 py-1 text-sm font-medium text-gray-100 bg-red-500 rounded-lg transition hover:scale-105 hover:bg-red-600">
+              <button
+                onClick={() => reviewRequest("rejected", request._id)}
+                className="px-3 py-1 text-sm font-medium text-gray-100 bg-red-500 rounded-lg transition hover:scale-105 hover:bg-red-600"
+              >
                 Reject
               </button>
-              <button className="px-3 py-1 text-sm font-medium text-gray-100 bg-blue-500 rounded-lg transition hover:scale-105 hover:bg-blue-600">
+              <button
+                onClick={() => reviewRequest("accepted", request._id)}
+                className="px-3 py-1 text-sm font-medium text-gray-100 bg-blue-500 rounded-lg transition hover:scale-105 hover:bg-blue-600"
+              >
                 Accept
               </button>
             </div>
