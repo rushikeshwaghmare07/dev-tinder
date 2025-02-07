@@ -1,11 +1,29 @@
+import axios from "axios";
 import React from "react";
+import { BACKEND_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserFromFeed } from "../app/features/feed/feedSlice";
 
 const UserCard = ({ user }) => {
   if (!user) {
     return <p className="text-center text-gray-500">Loading user...</p>;
   }
 
-  const { firstName, lastName, profileUrl, age, gender, about } = user;
+  const dispatch = useDispatch();
+  const { _id, firstName, lastName, profileUrl, age, gender, about } = user;
+
+  const handleSendRequest = async (status, userId) => {
+    try {
+      const res = await axios.post(
+        `${BACKEND_URL}/api/request/send/${status}/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeUserFromFeed(userId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -34,10 +52,16 @@ const UserCard = ({ user }) => {
             {about || "No about info available."}
           </p>
           <div className="card-actions flex justify-center gap-4 my-4">
-            <button className="btn btn-outline hover:scale-105  transition">
+            <button
+              onClick={() => handleSendRequest("ignored", _id)}
+              className="btn btn-outline hover:scale-105  transition"
+            >
               Ignore
             </button>
-            <button className="btn btn-secondary shadow-lg border-none hover:scale-105 transition">
+            <button
+              onClick={() => handleSendRequest("interested", _id)}
+              className="btn btn-secondary shadow-lg border-none hover:scale-105 transition"
+            >
               Interested
             </button>
           </div>
