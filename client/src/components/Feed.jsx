@@ -30,11 +30,11 @@ const Feed = () => {
   if (!feed) return;
 
   if (feed.length <= 0)
-    return <h1 className="flex justify-center my-10">No new users founds!</h1>;
+    return <h1 className="text-center text-gray-600 text-2xl mt-10">No new users founds!</h1>;
 
   return (
     <div className="flex justify-center mt-2">
-       <UserCard user={feed[0]} />
+       <UserCard user={feed[0]} showActions={true} />
     </div>
   );
 };
