@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React from "react";
 import { CodeXml } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,11 +11,15 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
     try {
-      await axios.post(`${BACKEND_URL}/api/auth/logout`, {}, {
-        withCredentials: true,
-      });
+      e.preventDefault();
+
+      await axios.post(
+        `${BACKEND_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
       dispatch(removeUser());
       return navigate("/login");
     } catch (error) {
@@ -36,7 +40,7 @@ const Navbar = () => {
         </div>
         {user && (
           <div className="flex items-center px-2">
-            <p className="px-3">Welcome, {user?.data?.firstName}</p>
+            <p className="px-3">Welcome, {user.firstName}</p>
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -44,7 +48,7 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img alt="user avatar" src={user?.data?.profileUrl} />
+                  <img alt="user avatar" src={user.profileUrl} />
                 </div>
               </div>
               <ul
