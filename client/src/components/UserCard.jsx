@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../app/features/feed/feedSlice";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, showActions = true }) => {
   if (!user) {
     return <p className="text-center text-gray-500">Loading user...</p>;
   }
@@ -51,20 +51,22 @@ const UserCard = ({ user }) => {
           <p className="text-gray-500 text-sm">
             {about || "No about info available."}
           </p>
-          <div className="card-actions flex justify-center gap-4 my-4">
-            <button
-              onClick={() => handleSendRequest("ignored", _id)}
-              className="btn btn-outline hover:scale-105  transition"
-            >
-              Ignore
-            </button>
-            <button
-              onClick={() => handleSendRequest("interested", _id)}
-              className="btn btn-secondary shadow-lg border-none hover:scale-105 transition"
-            >
-              Interested
-            </button>
-          </div>
+          {showActions && (
+            <div className="card-actions flex justify-center gap-4 my-4">
+              <button
+                onClick={() => handleSendRequest("ignored", _id)}
+                className="btn btn-outline hover:scale-105 transition"
+              >
+                Ignore
+              </button>
+              <button
+                onClick={() => handleSendRequest("interested", _id)}
+                className="btn btn-secondary shadow-lg border-none hover:scale-105 transition"
+              >
+                Interested
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
