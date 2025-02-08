@@ -46,10 +46,15 @@ const getConnections = async (req, res) => {
         { toUserId: loggedInUser._id, status: "accepted" },
         { fromUserId: loggedInUser._id, status: "accepted" },
       ],
-    }).populate({
-      path: "fromUserId",
-      select: "firstName lastName profileUrl age gender about skills",
-    });
+    })
+      .populate({
+        path: "fromUserId",
+        select: "firstName lastName profileUrl age gender about skills",
+      })
+      .populate({
+        path: "toUserId",
+        select: "firstName lastName profileUrl age gender about skills",
+      });
 
     if (!connections || connections.length === 0) {
       return res.status(200).json({
@@ -59,9 +64,18 @@ const getConnections = async (req, res) => {
       });
     }
 
-    const connectionData = connections.map(
-      (connection) => connection.fromUserId
-    );
+    const connectionData = connections
+      .map((connection) => {
+        if (
+          connection.fromUserId &&
+          connection.fromUserId._id.toString() === loggedInUser._id.toString()
+        ) {
+          return connection.toUserId;
+        } else {
+          return connection.fromUserId;
+        }
+      })
+      .filter((user) => typeof user === "object");
 
     return res.status(200).json({
       success: true,
