@@ -8,11 +8,17 @@ import Feed from "./components/Feed";
 import Profile from "./components/Profile";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
     <>
       <Provider store={store}>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          theme="dark"
+        />
         <BrowserRouter basename="/">
           <Routes>
             <Route path="/" element={<Body />}>
