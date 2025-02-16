@@ -1,6 +1,7 @@
 const User = require("../models/user.model.js");
 const { validateSignUpData } = require("../utils/validation.js");
 
+// Register user
 const userSignup = async (req, res) => {
   try {
     validateSignUpData(req);
@@ -57,6 +58,7 @@ const userSignup = async (req, res) => {
   }
 };
 
+// Login user
 const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -102,6 +104,7 @@ const userLogin = async (req, res) => {
   }
 };
 
+// Logout user
 const userLogout = async (req, res) => {
   try {
     const cookieOptions = {
