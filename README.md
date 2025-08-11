@@ -1,4 +1,7 @@
-﻿# dev-tinder
+﻿# Dev Tinder
+
+## Descriptions:
+  `Dev Tinder` is a developer-focused networking application inspired by **Tinder**, designed to help you connect with fellow developers. Users can discover other developers, send   connection requests, and engage in real-time chats, fostering collaboration and professional growth.
 
 ## Login Form
 ![login](https://github.com/user-attachments/assets/8249053c-975a-4b0f-97cb-e2b30b47ce59)
@@ -14,4 +17,5 @@
 
 ## Profile
 ![profile](https://github.com/user-attachments/assets/0ec1f56c-7b96-434d-83aa-2ad2bdb5e057)
+
 
